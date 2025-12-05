@@ -205,7 +205,7 @@ services:
         strip_path: true
         paths:
           - /analytics/v1/
-
+          
   ## Secure Database routes
   - name: meta
     _comment: 'pg-meta: /pg/* -> http://pg-meta:8080/*'
@@ -224,6 +224,48 @@ services:
           hide_groups_header: true
           allow:
             - admin
+
+  # ## Secure Database routes
+  # - name: meta
+  #   _comment: 'pg-meta: /pg/* -> http://pg-meta:8080/*'
+  #   url: http://meta:8080/
+  #   routes:
+  #     - name: meta-all
+  #       strip_path: true
+  #       paths:
+  #         - /pg/
+  #   plugins:
+  #     - name: key-auth
+  #       config:
+  #         hide_credentials: false
+  #     - name: acl
+  #       config:
+  #         hide_groups_header: true
+  #         allow:
+            - admin
+
+  #   ## Secure Database routes - pg-meta
+  # - name: pg-meta
+  #   url: http://meta:8080/
+  #   routes:
+  #     - name: pg-meta-api-platform
+  #       strip_path: true
+  #       paths:
+  #         - /api/platform/pg-meta
+  #     - name: pg-meta-legacy
+  #       strip_path: true
+  #       paths:
+  #         - /pg/
+  #   plugins:
+  #     - name: key-auth
+  #       config:
+  #         hide_credentials: false
+  #     - name: acl
+  #       config:
+  #         hide_groups_header: true
+  #         allow:
+  #           - admin
+
 
   ## Protected Dashboard - catch all remaining routes
   - name: dashboard

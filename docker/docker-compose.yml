@@ -11,7 +11,7 @@ services:
 
   studio:
     container_name: supabase-studio
-    image: supabase/studio:2025.10.20-sha-5005fc6
+    image: supabase/studio:2025.10.01-sha-8460121 #supabase/studio:2025.10.20-sha-5005fc6
     restart: unless-stopped
     healthcheck:
       test:
@@ -40,6 +40,7 @@ services:
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
 
       SUPABASE_URL: http://kong:8000
+      SUPABASE_INTERNAL_URL: http://kong:8000     # <-- REQUIRED
       SUPABASE_PUBLIC_URL: ${SUPABASE_PUBLIC_URL}
       SUPABASE_ANON_KEY: ${ANON_KEY}
       SUPABASE_SERVICE_KEY: ${SERVICE_ROLE_KEY}
@@ -80,6 +81,8 @@ services:
       DASHBOARD_PASSWORD: ${DASHBOARD_PASSWORD}
     # https://unix.stackexchange.com/a/294837
     entrypoint: bash -c 'eval "echo \"$$(cat ~/temp.yml)\"" > ~/kong.yml && /docker-entrypoint.sh kong docker-start'
+    networks:
+    - planet9_net_dev
 
   auth:
     container_name: supabase-auth
@@ -310,8 +313,8 @@ services:
         condition: service_healthy
     environment:
       PG_META_PORT: 8080
-      PG_META_DB_HOST: ${POSTGRES_HOST}
-      PG_META_DB_PORT: ${POSTGRES_PORT}
+      PG_META_DB_HOST: ${POSTGRES_HOST} #supabase-db alternative works!
+      PG_META_DB_PORT: ${POSTGRES_PORT} #5435 alternative works!
       PG_META_DB_NAME: ${POSTGRES_DB}
       PG_META_DB_USER: supabase_admin
       PG_META_DB_PASSWORD: ${POSTGRES_PASSWORD}
